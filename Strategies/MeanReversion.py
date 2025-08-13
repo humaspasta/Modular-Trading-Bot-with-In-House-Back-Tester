@@ -4,13 +4,13 @@ import pandas as pd
 class mean_reversion(BaseStrategy):
 
 
-    def __init__(self):
+    def __init__(self, lower= -0.03, upper=0.05):
         super().__init__()
         self.total_sum = 0.0
         self.total_n = 0
         self.mean = 0.0
-        self.lower = -0.03
-        self.upper = 0.05
+        self.lower = lower
+        self.upper = upper
 
     def calculate_candle_value(self, candle:pd.Series) -> float:
         '''
@@ -19,11 +19,14 @@ class mean_reversion(BaseStrategy):
         return (candle.loc['Close'] + candle.loc['Open']) / 2
     
     def calculate_price_deviation(self , p_candle:float) -> float:
+        '''
+        Returns the percent error as a decimal between the current candle price and the rolling mean.
+        '''
         return (p_candle - self.mean) / self.mean
     
-    def update_rolling_mean(self , candle):
+    def update_rolling_mean(self , candle:pd.Series) -> None:
         '''
-        Updates releavent values. Should be called by the backtester after each value is passed in.
+        Updates the mean. Should be called by the backtester after each value is passed in.
         '''
         self.total_sum += self.calculate_candle_value(candle)
         self.total_n += 1
