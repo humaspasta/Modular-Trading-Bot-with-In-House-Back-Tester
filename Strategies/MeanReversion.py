@@ -2,6 +2,9 @@ from BaseStrategy import BaseStrategy
 import pandas as pd
 
 class mean_reversion(BaseStrategy):
+    '''
+    A python implimentation of the mean reversion strategy. 
+    '''
 
 
     def __init__(self, lower= -0.03, upper=0.05):
