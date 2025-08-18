@@ -55,6 +55,7 @@ class data_manager:
                             current_price: FLOAT NOT NULL,
                             )
                             ''')
+        self.conn.commit()
 
         
         
