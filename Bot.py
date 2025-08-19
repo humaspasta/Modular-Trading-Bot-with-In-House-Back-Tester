@@ -34,17 +34,25 @@ class bot:
         except stats.StatisticsError:
             return 'FLAT'
         
-    def get_current_price(self):
-        self.candle['']
 
 
     def calc_position_size(self , ticker):
-        pass
+        '''
+        calculates the position size
+        '''
+        return (self.portfolio.balance * self.portfolio.get_risk()) / (self.portfolio.positions[ticker]['entry_price'] - self.portfolio.positions[ticker]['stop_loss'])
 
     
-    def create_order(self, ticker_name) -> None:
+    def create_and_send_order(self, ticker_name) -> None:
+        '''
+        Method for requesting an order
+        '''
         decision = self.calculate_decision()
-        position_info = self.get_position_info(ticker_name)
+        position_info = None
+        try:
+            position_info = self.get_position_info(ticker_name)
+        except:
+            pass
         
 
         if position_info:
@@ -59,9 +67,8 @@ class bot:
 
                 if result:
                     self.portfolio.positions.pop(order['name'])
-                
         else:
-            if decision == 'LONG' or decision == 'SHORT':#in the first part of a long or short position, we always buy stocks.
+            if decision == 'LONG':#in the first part of a long or short position, we always buy stocks.
                 
                 order = {'name' : ticker_name,
                         'signal' : decision,
@@ -69,13 +76,18 @@ class bot:
                         'type': 'buy'
                         }
                 self.broker.execute_order(order)
-                
-                
+            elif decision == 'SHORT':
+                order = {'name' : ticker_name,
+                        'signal' : decision,
+                        'number_of_stocks': self.calc_position_size(ticker_name),
+                        'type': 'borrow'
+                        }
+                self.broker.execute_order(order)
 
-
-
-    
     def get_position_info(self, ticker_name):
+        '''
+        returns the information of a stored position in the portfolio
+        '''
         return self.portfolio.positions[ticker_name]
 
 

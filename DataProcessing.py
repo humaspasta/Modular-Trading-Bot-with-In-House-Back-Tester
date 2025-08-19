@@ -53,6 +53,7 @@ class data_manager:
                             quanitity: INTEGER,
                             starting_price: FLOAT NOT NULL,
                             current_price: FLOAT NOT NULL,
+                            stop_loss: FLOAT NOT NULL
                             )
                             ''')
         self.conn.commit()
