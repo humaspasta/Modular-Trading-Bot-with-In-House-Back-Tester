@@ -14,9 +14,9 @@ class data_manager:
         self.conn = sqlite3.connect('positions.db')
         self.cursor = self.conn.cursor()
     
-    def download_data(self , ticker):
+    def download_data(self , ticker) -> str:
         '''
-        Downloads and stores requested data. 
+        Downloads and stores requested data. Returns location of requested data.
         '''
         filepath = os.path.join('Store' , f'{ticker}_{self.start}_{self.end}.parquet')
         if not os.path.exists(filepath):
@@ -27,8 +27,11 @@ class data_manager:
             data.resample(self.candle_freq).ffill(inplace=True)
             filepath = os.path.join('Store' , f'{ticker}_{self.start}_{self.end}.parquet')
             data.to_parquet(filepath , engine='pyarrow')
+
         else:
             print('...filepath exists...')
+
+        return filepath
 
     def remove_file(self , filename:str) -> None:
         '''

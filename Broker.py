@@ -59,6 +59,10 @@ class Broker:
         '''
         pd.DataFrame(self.order_log).to_csv(os.path.join('.', 'Store', 'OrderLog'))
 
+    def get_comission(v_trade, rate=0.02) -> float:
+        return v_trade * rate
+
+    
    
         
 

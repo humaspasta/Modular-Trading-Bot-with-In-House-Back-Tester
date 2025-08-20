@@ -1,4 +1,5 @@
 from DataProcessing import data_manager
+import copy
 
 class Portfolio:
 
@@ -66,7 +67,8 @@ class Portfolio:
         for position in self.positions:
             delta += self.positions[position]['current_price'] - self.positions[position]['starting_price']
         self.equity = self.balance + delta
-
+    def get_positions(self):
+        return copy.deepcopy(self.positions)
     def get_equity(self):
         self.calculate_equity()
         return self.equity
@@ -74,6 +76,6 @@ class Portfolio:
     def get_balance(self):
         return self.balance
     
-    def get_risk(self):
+    def get_personal_risk(self):
         return self.risk
     
